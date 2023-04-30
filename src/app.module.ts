@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UserModule } from './app/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PermissionModule } from './app/user copy/permission.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,
       entities: [process.env.TYPEORM_ENTITIES]
     }),
-    UserModule
+    UserModule,
+    PermissionModule
   ],
   controllers: [AppController],
   providers: [AppService],
