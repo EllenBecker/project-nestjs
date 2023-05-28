@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsUserAlreadyExist } from '../domain/decorators/user-already-exist.decorator';
 
 export class CreateUserDto {
 
@@ -9,6 +10,9 @@ export class CreateUserDto {
     @IsNotEmpty()
     @IsEmail()
     @IsString()
+    @IsUserAlreadyExist({
+        message: 'Já existe um usuário com esse e-mail.'
+    })
     email: string;
 
     @IsOptional()

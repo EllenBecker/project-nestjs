@@ -15,12 +15,16 @@ export class UserService {
     return await this.userRepository.save(createUserDto);
   }
 
-  findAll(): Promise<Array<User>> {
+  async findAll(): Promise<Array<User>> {
     return this.userRepository.find();
   }
 
-  findOne(id: number): Promise<User> {
+  async findOne(id: number): Promise<User> {
     return this.userRepository.findOne({ where: { id } });
+  }
+
+  async findOneByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({ where: { email } });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
