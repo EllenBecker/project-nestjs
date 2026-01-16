@@ -1,0 +1,41 @@
+services:
+  app:
+    container_name: nest-api
+    restart: unless-stopped
+    build: .
+    working_dir: /app
+    ports:
+      - ${API_PORT:-5000}:5000
+      - "9229:9229"
+    networks:
+      - default_net
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run start:debug
+
+  db:
+    container_name: nest-db
+    image: postgres:16
+    restart: unless-stopped
+    networks:
+      - default_net
+    shm_size: 256m
+    ports:
+      - ${TYPEORM_PORT:-5432}:5432
+    environment:
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD:-password}
+      POSTGRES_USER: ${TYPEORM_USERNAME:-postgres}
+      POSTGRES_DB: ${TYPEORM_DATABASE:-nest-api}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  default_net:
+    driver: bridge
